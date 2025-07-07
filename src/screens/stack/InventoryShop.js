@@ -13,6 +13,7 @@ import { useCallback, useState } from 'react';
 
 import { useStore } from '../../store/context';
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { height } = Dimensions.get('window');
 
@@ -27,6 +28,7 @@ const InventoryShop = ({ title }) => {
     getEarnedCoins,
     saveInventory,
     getInventory,
+    saveEarnedCoins,
   } = useStore();
   const [index, setIndex] = useState(0);
   const [showStoryDetails, setShowStoryDetails] = useState(0);
@@ -72,6 +74,7 @@ const InventoryShop = ({ title }) => {
     if (coinsLimit) return;
     else {
       setEarnedCoins(earnedCoins - skins[selectedIdx].coins);
+      saveEarnedCoins(earnedCoins - skins[selectedIdx].coins);
     }
   };
 
@@ -100,7 +103,7 @@ const InventoryShop = ({ title }) => {
       saveInventory('Story', isUnlockedStory);
     }
     if (earnedCoins < 30) return;
-    else setEarnedCoins(earnedCoins - 30);
+    else setEarnedCoins(earnedCoins - 30), saveEarnedCoins(earnedCoins - 30);
   };
 
   const handleShowDetails = selectedIdx => {
